@@ -1,11 +1,11 @@
 import { useEffect, useState } from "react"
 
+
+const useRoutines = ()=>{
+
 const [routines, setRoutines] = useState(()=>{
     const localRoutines = JSON.parse(localStorage.getItem("routines"));
-    if(!localRoutines){
-        localRoutines = []
-    }
-    return localRoutines
+    return localRoutines ? localRoutines : []
 })
 
 useEffect(()=>{
@@ -27,17 +27,21 @@ const deleteRoutine = (id)=>{
     setRoutines(routines => routines.filter(r=>r.id !== Number(id)));
 }
 
-const modifyRoutine = (id, title)=>{
-    const currentRoutine = routines.find(r => r.id === Number(id));
-    currentRoutine = {
-        ...currentRoutine,
-        title: title
-    }
-}
+// const modifyRoutine = (id, title)=>{
+//     const currentRoutine = routines.find(r => r.id === Number(id));
+//     currentRoutine = {
+//         ...currentRoutine,
+//         title: title
+//     }
+// }
 
-export {
+return {
     routines, 
     createRoutine,
-    modifyRoutine,
+    // modifyRoutine,
     deleteRoutine
 }
+
+}
+
+export default useRoutines;

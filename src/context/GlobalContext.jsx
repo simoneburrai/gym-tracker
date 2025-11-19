@@ -1,9 +1,17 @@
 import { useContext, createContext } from "react";
+import useRoutines from "../hooks/useRoutines";
 
 const GlobalContext = createContext();
 
+
+
 export function GlobalProvider({children}){
-    return <GlobalContext.Provider value={{}}>
+
+    const {...useRoutineData}= useRoutines()
+
+    console.log(useRoutineData)
+
+    return <GlobalContext.Provider value={{...useRoutineData}}>
         {children}
     </GlobalContext.Provider>
 }
