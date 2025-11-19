@@ -27,18 +27,26 @@ const deleteRoutine = (id)=>{
     setRoutines(routines => routines.filter(r=>r.id !== Number(id)));
 }
 
-// const modifyRoutine = (id, title)=>{
-//     const currentRoutine = routines.find(r => r.id === Number(id));
-//     currentRoutine = {
-//         ...currentRoutine,
-//         title: title
-//     }
-// }
+const modifyRoutine = (id, title)=>{
+    let currentRoutine = routines.find(r => r.id === Number(id));
+    currentRoutine = {
+        ...currentRoutine,
+        title: title
+    }
+    setRoutines(prev => prev.map(r=> {
+            if(r.id === Number(id)){
+                return currentRoutine
+            }
+            return r;
+        })
+    )
+    
+}
 
 return {
     routines, 
     createRoutine,
-    // modifyRoutine,
+    modifyRoutine,
     deleteRoutine
 }
 
