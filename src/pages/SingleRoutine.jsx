@@ -1,11 +1,15 @@
 import { Navigate, useParams } from "react-router-dom"
 import { useGlobalContext } from "../context/GlobalContext";
+import { useState } from "react";
 
 export default function SingleRoutine(){
 
     const {routines, deleteRoutine, modifyRoutine} = useGlobalContext();
     const {id} = useParams();
     const currentRoutine = routines.find(r => r.id === Number(id));
+
+    const [editTitleMode, setEditTitleMode] = useState(false)
+
     console.log(currentRoutine);
 
     const confirmElimination = ()=>{
@@ -16,15 +20,14 @@ export default function SingleRoutine(){
         deleteRoutine(currentRoutine.id);
     }
 
-    const modifyTitle = ()=>{
-        let newTitle = prompt("Modifica il titolo della Routine")
+    const modifyTitle = (e)=>{
+        const newTitle = e.target.value;
         while(!newTitle || newTitle.trim() === ""){
             if(newTitle === null){
                 return;
             }
-            newTitle = prompt("Inserisci un titolo Valido per Modificare la routine");
         }
-        modifyRoutine(id, newTitle);
+        modifyRoutine(id, {title: newTitle});
     }
 
     if(!currentRoutine){
@@ -33,9 +36,22 @@ export default function SingleRoutine(){
 
     return <>
     <div>
-        <h1>Routine con id {id}</h1>
+        {!editTitleMode ? 
+             <button onClick={()=>setEditTitleMode(true)} className="modify-title-button">{currentRoutine.title}</button> 
+             : <input
+                className="modify-title-button"
+                defaultValue={currentRoutine.title}
+                onBlur={(e)=>{
+                    modifyTitle(e);
+                    setEditTitleMode(false)}}
+                onKeyDown={(e)=>{
+                    const currentKey = e.key
+                    if(currentKey === "Enter"){
+                        modifyTitle(e)
+                    }
+                }}/>}
+        
         <div>
-            <button onClick={modifyTitle}>Modifica</button>
             <button onClick={confirmElimination}>Elimina</button>
         </div>
     </div>

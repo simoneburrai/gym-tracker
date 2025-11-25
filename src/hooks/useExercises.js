@@ -16,6 +16,9 @@ const createExercise = (content)=>{
     const currentIds = exercises.map(e=> e.id);
     const biggestId = Math.max(0, ...currentIds);
     const newExercise = {
+        unitType: "Kg",
+        setType: "reps",
+        restTime: null,
         ...content,
         id: biggestId + 1
     };

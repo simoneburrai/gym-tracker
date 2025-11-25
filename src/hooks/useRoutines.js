@@ -27,11 +27,11 @@ const deleteRoutine = (id)=>{
     setRoutines(routines => routines.filter(r=>r.id !== Number(id)));
 }
 
-const modifyRoutine = (id, title)=>{
+const modifyRoutine = (id, content)=>{
     let currentRoutine = routines.find(r => r.id === Number(id));
     currentRoutine = {
         ...currentRoutine,
-        title: title
+        ...content
     }
     setRoutines(prev => prev.map(r=> {
             if(r.id === Number(id)){
