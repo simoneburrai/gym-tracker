@@ -1,14 +1,14 @@
 import { Navigate, useParams } from "react-router-dom"
 import { useGlobalContext } from "../context/GlobalContext";
 import { useState } from "react";
+import EditTitleButtonInput from "../components/EditTileButtonInput";
 
 export default function SingleRoutine(){
 
-    const {routines, deleteRoutine, modifyRoutine} = useGlobalContext();
+    const {routines, deleteRoutine, modifyRoutine, exercises, modifyExercises, deleteExercise, createExercise} = useGlobalContext();
     const {id} = useParams();
     const currentRoutine = routines.find(r => r.id === Number(id));
 
-    const [editTitleMode, setEditTitleMode] = useState(false)
 
     console.log(currentRoutine);
 
@@ -30,29 +30,42 @@ export default function SingleRoutine(){
         modifyRoutine(id, {title: newTitle});
     }
 
+    const createExTitle = ()=>{
+        let exTitle = prompt("Inserisci un Nuovo Titolo");
+        while(!exTitle || !exTitle.trim()){
+            if(exTitle===null){
+                return;
+            }
+            exTitle = prompt("Titolo non valido, inserisci un Nuovo titolo");                                    
+        }
+        createExercise({title: exTitle})
+    }
+
     if(!currentRoutine){
         return <Navigate to="/routines"/>
     }
 
     return <>
     <div>
-        {!editTitleMode ? 
-             <button onClick={()=>setEditTitleMode(true)} className="modify-title-button">{currentRoutine.title}</button> 
-             : <input
-                className="modify-title-button"
-                defaultValue={currentRoutine.title}
-                onBlur={(e)=>{
-                    modifyTitle(e);
-                    setEditTitleMode(false)}}
-                onKeyDown={(e)=>{
-                    const currentKey = e.key
-                    if(currentKey === "Enter"){
-                        modifyTitle(e)
-                    }
-                }}/>}
-        
+        <div className="routine-title">
+            <EditTitleButtonInput 
+                title={currentRoutine.title} 
+                onChange={(e)=>{
+                        modifyTitle(e);
+                }}
+            />
+            <button onClick={confirmElimination}>Delete</button>
+        </div>
         <div>
-            <button onClick={confirmElimination}>Elimina</button>
+        <button onClick={createExTitle}>Add Exercise</button>
+        {exercises.length > 0 ?
+            <div>
+                {exercises.map(e => <div key={e.id}>
+                    {e.title}
+                </div>)}
+            </div>   
+            : <p>There are not created Exercises</p> 
+        }
         </div>
     </div>
     

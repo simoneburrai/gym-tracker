@@ -9,3 +9,7 @@ body{
     border: 0px;
     font-size: 2rem;
 }
+.routine-title {
+    display: flex;
+    justify-content: space-between;
+}
